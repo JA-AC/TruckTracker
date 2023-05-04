@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruckTracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link href="../css/normalize.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- ------- -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <!-- js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.2/docxtemplater.js"></script>
+        <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+        <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip-utils.js"></script>
+
+
+    <style>
+        .boton-guardar {
+            background-color: green;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body onload="CargarApp()">
+    <div class="sp-header"><a href="../index.html"><svg xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-arrow-back-up icon-conf" width="48" height="48" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="#04c653" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1" />
+            </svg></a></div>
+
+    <main class="contenedor main ">
+        <div class="barra-perfil">
+            <span class="boton" id="boton1">Lista de Camiones</span>
+            <span class="boton" id="boton2">Agregar Camion</span>
+            <span class="boton" id="boton3">Rutas</span>
+        </div>
+        <!-- ---------------- -->
+        <div class="agregarLista" id="lista">
+            <h2> Lista de Camiones</h2>
+            <div id="lista-camiones" class="lista-camiones-grid">
+            </div>
+        </div>
+
+        <!-- ------------ -->
+        <div class="container agregarRuta" id="rutas">
+            <h2>Lista Rutas</h2>
+            <div id="lista-rutas" class="lista-rutas"></div>
+        </div>
+
+
+        <!-- ----------- -->
+        <div class="container agregarRuta" id="ruta">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2>Hoja de <b>Ruta</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form id="formularioRuta" onsubmit="return false">
+                        <div class="col-md-6">
+                            <label>Camionero:</label>
+                            <input type="text" name="camionero" id="camionero" class='form-control' maxlength="50">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Placa:</label>
+                            <input type="ext" name="placa" id="placa" class='form-control' maxlength="5">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Tipo de Carga:</label>
+                            <select class='form-control' id="tipo" name="tipo">
+                                <option value="">Seleccione el tipo de carga</option>
+                                <option value="granel">Granel</option>
+                                <option value="perecedera">Perecedera</option>
+                                <option value="fragil">fragil</option>
+                                <option value="peligrosa">Peligrosa</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label>Ciudad Origen:</label>
+                            <input type="text" name="ciudadO" id="ciudadO" class='form-control' maxlength="50">
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label>Ciudad Destino:</label>
+                            <input type="text" name="ciudadD" id="ciudadD" class='form-control' maxlength="50">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Nombre Cliente:</label>
+                            <input type="text" name="nombreC" id="nombreC" class='form-control' maxlength="50">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>fecha:</label>
+                            <input type="text" name="fecha" id="fecha" class='form-control' maxlength="255">
+                        </div>
+                        <div class="col-md-12 pull-right">
+                            <hr>
+                            <button type="submit" class="boton-guardar" onclick="crearRuta()">Guardar Ruta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ------------------------------ -->
+        <div id="camion" class="agregarCamion">
+            <div class="container ">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <h2>Agregar <b>Camion</b></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form id="formularioCamion" onsubmit="return false">
+                            <div class="col-md-6">
+                                <label class="campo_label" for="marca">Marca: </label>
+                                <input class='form-control' type="text" id="marca" name="marca">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="campo_label" for="modelo">Modelo: </label>
+                                <input class='form-control' type="text" id="modelo" name="modelo">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="campo_label" for="ano">Año: </label>
+                                <input class='form-control' type="number" id="ano" name="ano" min="1900" max="2099">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="campo_label" for="placa">Placa: </label>
+                                <input class='form-control' type="text" id="placa" name="placa">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="campo_label" for="conductor">Conductor: </label>
+                                <input class='form-control' type="text" id="conductor" name="conductor">
+                            </div>
+                            <div class="col-md-12 pull-right">
+                                <hr>
+                                <button class="boton-guardar" type="submit" onclick="agregarCamion()">Guardar</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+
+    <script>
+        const boton1 = document.querySelector("#boton1")
+        const boton2 = document.querySelector("#boton2")
+        const boton3 = document.querySelector("#boton3")
+
+        const lista = document.querySelector("#lista");
+        const ruta = document.querySelector("#ruta");
+        const rutas = document.querySelector("#rutas");
+        const camion = document.querySelector("#camion")
+
+        boton1.addEventListener("click", display)
+        boton2.addEventListener("click", display)
+        boton3.addEventListener("click", display)
+
+        function display(e) {
+
+            switch (e.target.id) {
+                case "boton1":
+                    lista.style.display = 'block';
+                    camion.style.display = 'none';
+                    rutas.style.display = 'none';
+                    ruta.style.display = 'none';
+                    break;
+
+                case "boton2":
+                    camion.style.display = 'block';
+                    lista.style.display = 'none';
+                    rutas.style.display = 'none';
+                    ruta.style.display = 'none';
+                    break;
+
+                case "boton3":
+                    rutas.style.display = 'block';
+                    lista.style.display = 'none';
+                    camion.style.display = 'none';
+                    ruta.style.display = 'none';
+                    break;
+            }
+        }
+    </script>
+    <script src="../js/camiones.js"></script>
+    <script src="../js/hojaruta.js"></script>
+    <script src="../js/app.js"></script>
+    <script  >
+
+            function crearWord(id) {
+               
+                let indiceRuta = HojasRutas.findIndex((ruta) => ruta._id === id);
+                let ruta = HojasRutas[indiceRuta];
+ 
+              let docs = document.getElementById("doc");
+                alert("Archivo Descargado");
+                let reader = new FileReader();
+                if (docs.files.length === 0) {
+                    alert("No files selected");
+                }
+                reader.readAsBinaryString(docs.files.item(0));
+
+                reader.onerror = function (evt) {
+                    console.log("error reading file", evt);
+                    alert("error reading file" + evt);
+                };
+                reader.onload = function (evt) {
+                    const content = evt.target.result;
+                    let zip = new PizZip(content);
+                    let doc = new window.docxtemplater(zip, {
+                        paragraphLoop: true,
+                        linebreaks: true,
+                    });
+
+
+                    doc.render({
+                       origen: ruta._origen,
+                        destino: ruta._destino,
+                        fecha: ruta._fecha,
+                        cliente: ruta._cliente,
+                        carga: ruta._carga,
+                        placa: ruta._placa,
+                        conductor: ruta._camionero
+                    });
+
+                    var blob = doc.getZip().generate({
+                        type: "blob",
+                        mimeType:
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+                        compression: "DEFLATE",
+                    });
+    
+                    saveAs(blob, "hojaderuta.docx");
+                };
+            }
+    </script>
+</body>
+
+</html>
